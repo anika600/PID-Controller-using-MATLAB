@@ -1,24 +1,24 @@
-# PID Controller Design using Ziegler-Nichols Tuning Method
+# PID Controller Design & Simulink Verification
 
-This MATLAB repository demonstrates the design and analysis of **Proportional (P)**, **Proportional-Integral (PI)**, and **Proportional-Integral-Derivative (PID)** controllers for a third-order continuous-time system. 
+This repository demonstrates the design, simulation, and analysis of **Proportional (P)**, **Proportional-Integral (PI)**, and **Proportional-Integral-Derivative (PID)** controllers for a third-order continuous-time system. 
 
-The controller parameters are automatically calculated using the classic **Ziegler-Nichols (Z-N) closed-loop tuning method** based on the system's frequency response margins.
+The project combines an automated MATLAB script for calculating parameters via the classic **Ziegler-Nichols (Z-N) closed-loop tuning method** with a **Simulink model** to verify the transient and steady-state performance.
 
 ---
 
 ## 📌 System Description
 
-The plant model used in this simulation is a third-order transfer function defined as:
+The plant model used in this project is a third-order transfer function defined as:
 
 $$G(s) = \frac{5}{(s+2)(s+4)(s+6)} = \frac{5}{s^3 + 12s^2 + 44s + 48}$$
 
-The script dynamically determines the system's stability margins to extract the **Ultimate Gain ($K_u$)** and **Ultimate Period ($P_u$)** required for the tuning formulas.
+The MATLAB script dynamically determines the system's stability margins to extract the **Ultimate Gain ($K_u$)** and **Ultimate Period ($P_u$)** required for the tuning formulas.
 
 ---
 
 ## 🛠️ Ziegler-Nichols Tuning Parameters
 
-The script applies the traditional Z-N rules to calculate the controller gains:
+The controller gains are calculated using traditional Z-N closed-loop tuning rules:
 
 | Controller Type | $K_p$ | $T_i$ | $T_d$ |
 | :--- | :--- | :--- | :--- |
@@ -31,26 +31,29 @@ The script applies the traditional Z-N rules to calculate the controller gains:
 ## 🚀 How to Run the Project
 
 ### Prerequisites
-* MATLAB (R2018a or newer recommended)
+* MATLAB & Simulink 
 * Control System Toolbox
 
 ### Execution Steps
-1. Clone this repository or download the `PIDcontroller.m` file.
-2. Open MATLAB and navigate to the directory containing the file.
-3. Run the script by typing `PIDcontroller` in the Command Window, or press **Run (F5)** in the MATLAB Editor.
+1. Clone this repository and ensure all files are in the same working directory.
+2. Run the MATLAB script by typing `PIDcontroller` in the Command Window, or press **Run (F5)**. This calculates the controller variables ($K_p, K_i, K_d$) and loads them into your workspace.
+3. Open the Simulink model file: `simulinkmodel.slx`.
+4. Run the Simulink simulation to feed the workspace parameters into the parallel PID blocks.
+5. Double-click the **Scope** block in Simulink to view the live behavioral graph.
 
 ---
 
 ## 📊 Performance & Outputs
 
 ### 1. Command Window Metrics
-When executed, the script outputs the critical frequency-domain metrics derived from the plant's uncompensated open-loop response:
+The script outputs the critical frequency-domain metrics derived from the plant's uncompensated open-loop response:
 * **Ultimate Gain ($K_u$):** The gain margin threshold where the system becomes marginally stable.
 * **Oscillation Frequency ($\omega_u$):** The phase crossover frequency in rad/s.
 
-### 2. Step Response Comparison
-The script simulates a unit step input to compare how each controller manages transient and steady-state behaviors:
+### 2. Scope Step Response Comparison
+The step response behavior of each controller configuration is visualized through the Simulink Scope block:
 
+![Simulink Scope Step Response](Scope.png)
 
 * **Proportional Only (P):** Fast response but suffers from a significant steady-state offset.
 * **Proportional-Integral (PI):** Eliminates the steady-state error entirely, but introduces heavy oscillations and high overshoot.
@@ -60,9 +63,10 @@ The script simulates a unit step input to compare how each controller manages tr
 
 ## 📁 Repository Structure
 
-* `PIDcontroller.m` - Main MATLAB script containing the plant definition, Z-N tuning formulas, closed-loop feedback loops, and plotting commands.
-*  - Scope plot showing the step response comparison.
-* `README.md` - Documentation of the project.
+* **`PIDcontroller.m`** - Main MATLAB script containing the plant definition, Z-N tuning mathematical formulas, closed-loop feedback loops, and plotting routines.
+* **`simulinkmodel.slx`** - Simulink block diagram layout containing the step input, parallel PID controller configurations, plant transfer function, and routing to the multi-input Scope.
+* **`Scope.png`** - Exported screenshot from the Simulink Scope block illustrating the performance comparison of the P, PI, and PID controllers.
+* **`README.md`** - Documentation of the project.
 
 ---
 
